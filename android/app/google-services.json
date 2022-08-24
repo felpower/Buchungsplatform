@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "870171387832",
+    "project_id": "esv-steyr",
+    "storage_bucket": "esv-steyr.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:870171387832:android:3147075792882b7019114d",
+        "android_client_info": {
+          "package_name": "com.example.untitled"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "870171387832-60l1ehch7m67a498rc37miudb1dqch3v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJU6lyT5DIfIe_TtYtGRTMkK65JjHRW_o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "870171387832-60l1ehch7m67a498rc37miudb1dqch3v.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "870171387832-2665ombqa7di12t6alvtq7t2v0jeglnr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.untitled"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
