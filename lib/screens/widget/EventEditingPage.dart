@@ -32,6 +32,13 @@ class _EventEditingPageState extends State<EventEditingPage> {
     if (widget.event == null) {
       fromDate = DateTime.now();
       toDate = DateTime.now().add(const Duration(hours: 2));
+    } else {
+      final event = widget.event!;
+
+      playerController.text = event.player;
+
+      fromDate = event.start;
+      toDate = fromDate.add(Duration(hours: event.duration));
     }
   }
 
@@ -148,10 +155,9 @@ class _EventEditingPageState extends State<EventEditingPage> {
       if (date == null) return null;
 
       final time =
-      Duration(hours: initialDate.hour, minutes: initialDate.minute);
+          Duration(hours: initialDate.hour, minutes: initialDate.minute);
 
       return date.add(time);
-
     }
   }
 
@@ -203,9 +209,16 @@ class _EventEditingPageState extends State<EventEditingPage> {
           duration: chosenDuration,
           place: 'Place 1',
           info: '');
-      final provider = Provider.of<EventProvider>(context, listen: false);
-      provider.addEvent(event);
+      final isEditing = widget.event != null;
 
+      final provider = Provider.of<EventProvider>(context, listen: false);
+
+      if (isEditing) {
+        provider.editEvent(event, widget.event!);
+        Navigator.of(context).pop();
+      } else {
+        provider.addEvent(event);
+      }
       Navigator.of(context).pop();
     }
   }
