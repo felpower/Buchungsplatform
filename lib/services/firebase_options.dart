@@ -70,7 +70,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '870171387832',
     projectId: 'esv-steyr',
     storageBucket: 'esv-steyr.appspot.com',
-    iosClientId: '870171387832-2665ombqa7di12t6alvtq7t2v0jeglnr.apps.googleusercontent.com',
+    iosClientId:
+        '870171387832-2665ombqa7di12t6alvtq7t2v0jeglnr.apps.googleusercontent.com',
     iosBundleId: 'com.example.untitled',
   );
 }

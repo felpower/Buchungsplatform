@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:untitled/screens/authenticate/login.dart';
 import 'package:untitled/screens/authenticate/register.dart';
-import 'package:flutter/material.dart';
 
 class Handler extends StatefulWidget {
   @override
@@ -10,22 +10,20 @@ class Handler extends StatefulWidget {
 }
 
 class _Handler extends State<Handler> {
-
   bool showSignin = true;
 
-  void toggleView(){
+  void toggleView() {
     setState(() {
       showSignin = !showSignin;
     });
   }
+
   @override
   Widget build(BuildContext context) {
-    if(showSignin)
-    {
-      return Login(toggleView : toggleView);
-    }else
-    {
-      return Register(toggleView : toggleView);
+    if (showSignin) {
+      return Login(toggleView: toggleView);
+    } else {
+      return Register(toggleView: toggleView);
     }
   }
 }

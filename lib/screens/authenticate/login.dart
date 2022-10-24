@@ -1,10 +1,10 @@
-import 'package:untitled/models/loginuser.dart';
-import 'package:untitled/screens/home/home.dart';
-import 'package:untitled/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:untitled/models/loginuser.dart';
+import 'package:untitled/services/auth.dart';
 
 class Login extends StatefulWidget {
   final Function? toggleView;
+
   Login({this.toggleView});
 
   @override
@@ -38,7 +38,7 @@ class _Login extends State<Login> {
             contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
             hintText: "Email",
             border:
-            OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))));
+                OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))));
 
     final passwordField = TextFormField(
         obscureText: _obscureText,
@@ -59,7 +59,7 @@ class _Login extends State<Login> {
             hintText: "Password",
             suffixIcon: IconButton(
               icon:
-              Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
+                  Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
               onPressed: () {
                 setState(() {
                   _obscureText = !_obscureText;
@@ -86,7 +86,8 @@ class _Login extends State<Login> {
         onPressed: () async {
           dynamic result = await _auth.signInAnonymous();
 
-          if (result.uid == null) { //null means unsuccessfull authentication
+          if (result.uid == null) {
+            //null means unsuccessfull authentication
             showDialog(
                 context: context,
                 builder: (context) {
@@ -113,9 +114,10 @@ class _Login extends State<Login> {
         padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () async {
           if (_formKey.currentState!.validate()) {
-
-            dynamic result = await _auth.signInEmailPassword(LoginUser(email: _email.text,password: _password.text));
-            if (result.uid == null) { //null means unsuccessfull authentication
+            dynamic result = await _auth.signInEmailPassword(
+                LoginUser(email: _email.text, password: _password.text));
+            if (result.uid == null) {
+              //null means unsuccessfull authentication
               showDialog(
                   context: context,
                   builder: (context) {

@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:booking_calendar/booking_calendar.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'services/firebase_options.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
+
+import '../services/firebase_options.dart';
 
 void main() {
   initializeDateFormatting()

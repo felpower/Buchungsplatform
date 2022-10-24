@@ -38,6 +38,8 @@ dependencies:
   firebase_core: ^1.21.0
   cloud_firestore: ^3.4.5
   json_annotation: ^4.6.0
+  intl: ^0.17.0
+  counter_button: ^1.0.1
   syncfusion_flutter_calendar: ^19.1.58
   firebase_database: ^6.1.2
   firebase_auth: ^3.3.11
