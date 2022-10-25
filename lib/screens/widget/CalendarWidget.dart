@@ -13,11 +13,13 @@ class CalendarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final events = Provider.of<EventProvider>(context).events;
     return SfCalendar(
-      view: CalendarView.day,
-      dataSource: EventDataSource(events),
+      view: CalendarView.timelineWeek,
+      dataSource: DataSource.getDataSource(events),
       initialDisplayDate: DateTime.now(),
       firstDayOfWeek: DateTime.monday,
-      
+
+      resourceViewSettings:
+          const ResourceViewSettings(visibleResourceCount: 2, size: 50),
       onLongPress: (details) {
         final provider = Provider.of<EventProvider>(context, listen: false);
         provider.setDate(details.date!);

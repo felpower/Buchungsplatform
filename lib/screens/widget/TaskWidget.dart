@@ -28,8 +28,10 @@ class _TaskWidgetState extends State<TaskWidget> {
         data: SfCalendarThemeData(),
         child: SfCalendar(
           view: CalendarView.timelineDay,
-          dataSource: EventDataSource(provider.events),
+          dataSource: DataSource.getDataSource(provider.events),
           initialDisplayDate: provider.selectedDate,
+          resourceViewSettings:
+          const ResourceViewSettings(visibleResourceCount: 2, size: 40),
           appointmentBuilder: appointmentBuilder,
           todayHighlightColor: Colors.black,
           selectionDecoration:

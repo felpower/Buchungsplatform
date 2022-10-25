@@ -39,7 +39,7 @@ class EventViewingPage extends StatelessWidget {
   buildDateTime(event) {
     return Column(
       children: [
-        Text('Datum: ' + Utils.toDate(event.start)),
+        Text('Datum: ' + Utils.toDate(event.startTime)),
         Text('Dauer: ' + event.duration.toString()),
       ],
     );

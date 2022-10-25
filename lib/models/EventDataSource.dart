@@ -1,29 +1,42 @@
+import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import 'Event.dart';
 
-class EventDataSource extends CalendarDataSource {
-  EventDataSource(List<Event> appointments) {
+class DataSource extends CalendarDataSource {
+  DataSource(List<Event> appointments, List<CalendarResource> resourceColl) {
     this.appointments = appointments;
+    resources = resourceColl;
   }
 
   Event getEvent(int index) => appointments![index] as Event;
 
+  CalendarResource getResource(int index) => resources![index];
+
   @override
   DateTime getStartTime(int index) {
     var event = getEvent(index);
-    print("This is event with start time: " + event.start.toString());
-    return event.start;
+    return event.startTime;
   }
 
   @override
   DateTime getEndTime(int index) {
     var event = getEvent(index);
-    return event.start.add(Duration(hours: event.duration));
+    return event.startTime.add(Duration(hours: event.duration));
   }
 
   @override
   String getSubject(int index) {
     return getEvent(index).player;
+  }
+
+  static DataSource getDataSource(List<Event> events) {
+    List<CalendarResource> resources = <CalendarResource>[];
+
+    resources.add(CalendarResource(
+        displayName: 'Platz 1', id: '0001', color: Colors.red));
+    resources.add(CalendarResource(
+        displayName: 'Platz 2', id: '0002', color: Colors.blue));
+    return DataSource(events, resources);
   }
 }
