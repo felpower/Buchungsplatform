@@ -9,7 +9,10 @@ class DataSource extends CalendarDataSource {
     resources = resourceColl;
   }
 
-  Event getEvent(int index) => appointments![index] as Event;
+  Event getEvent(int index) {
+    print("This is an Appointment " + appointments![index]);
+    return appointments![index];
+  }
 
   CalendarResource getResource(int index) => resources![index];
 

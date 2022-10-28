@@ -8,6 +8,9 @@ import 'package:untitled/utils/utils.dart';
 import '../../models/Event.dart';
 import '../../services/EventProvider.dart';
 
+final key = GlobalKey<CastListState>();
+final playerController = TextEditingController();
+
 class EventEditingPage extends StatefulWidget {
   final Event? event;
 
@@ -22,11 +25,17 @@ class EventEditingPage extends StatefulWidget {
 
 class _EventEditingPageState extends State<EventEditingPage> {
   final _formKey = GlobalKey<FormState>();
-  final playerController = TextEditingController();
+
   late DateTime fromDate;
   late DateTime toDate;
+  int chosenDuration = 1;
   int guestCounter = 0;
-  int place = 0;
+  String gameType = 'Spieltyp: Einzel';
+  int place = 1;
+  String players = "Patrick";
+  TextEditingController textEditingController = TextEditingController();
+  TextEditingController infoTextController = TextEditingController();
+  CastList stateWidget = CastList(key: key);
 
   @override
   void initState() {
@@ -34,6 +43,10 @@ class _EventEditingPageState extends State<EventEditingPage> {
 
     if (widget.event == null) {
       fromDate = DateTime.now();
+      fromDate = fromDate
+          .subtract(Duration(minutes: fromDate.minute))
+          .add(const Duration(hours: 1));
+      print("From Date: $fromDate");
       toDate = DateTime.now().add(const Duration(hours: 2));
     } else {
       final event = widget.event!;
@@ -41,12 +54,19 @@ class _EventEditingPageState extends State<EventEditingPage> {
       playerController.text = event.player;
 
       fromDate = event.startTime;
+      fromDate = fromDate
+          .subtract(Duration(minutes: fromDate.minute))
+          .add(const Duration(hours: 1));
+      print("From Date: $fromDate");
       toDate = fromDate.add(Duration(hours: event.duration));
     }
   }
 
   @override
   void dispose() {
+    // Clean up the controller when the widget is disposed.
+    infoTextController.dispose();
+    textEditingController.dispose();
     playerController.dispose();
     super.dispose();
   }
@@ -64,7 +84,9 @@ class _EventEditingPageState extends State<EventEditingPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                buildPlayers(),
+                buildPlayer(),
+                const SizedBox(height: 12),
+                stateWidget,
                 const SizedBox(height: 12),
                 buildDuration(),
                 const SizedBox(height: 12),
@@ -75,6 +97,8 @@ class _EventEditingPageState extends State<EventEditingPage> {
                 buildSpielTyp(),
                 const SizedBox(height: 12),
                 buildDurationPicker(),
+                const SizedBox(height: 12),
+                buildInfo(),
               ],
             ),
           ),
@@ -92,45 +116,109 @@ class _EventEditingPageState extends State<EventEditingPage> {
             label: const Text('Reservieren')),
       ];
 
-  Widget buildPlayers() => TextFormField(
-        style: const TextStyle(fontSize: 24),
-        decoration: const InputDecoration(
-            border: UnderlineInputBorder(), hintText: 'Spieler hinzufügen'),
-        onFieldSubmitted: (_) {},
-        validator: (players) => players != null && players.isEmpty
-            ? 'Spieler können nicht leer sein'
-            : null,
-        controller: playerController,
+  List<String> playerList = [
+    "Fritz",
+    "Gerhard",
+    "Johann",
+    "Richard",
+    "Hermann"
+  ];
+
+  ElevatedButton createButton(item) => ElevatedButton.icon(
+        // <-- ElevatedButton
+        onPressed: () {},
+        icon: const Icon(
+          Icons.close,
+          size: 24.0,
+        ),
+        label: Text(item),
       );
 
+  Widget buildPlayer() => Autocomplete(
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          if (textEditingValue.text == '') {
+            return const Iterable<String>.empty();
+          } else {
+            List<String> matches = <String>[];
+            matches.addAll(playerList);
+
+            matches.retainWhere((s) {
+              return s
+                  .toLowerCase()
+                  .contains(textEditingValue.text.toLowerCase());
+            });
+
+            return matches;
+          }
+        },
+        onSelected: (String selection) {
+          key.currentState?.addToCastList(selection);
+          (context as Element).reassemble();
+          playerController.text = key.currentState!._cast.toString();
+          textEditingController.text = "";
+        },
+        fieldViewBuilder: (BuildContext context,
+            TextEditingController fieldTextEditingController,
+            FocusNode fieldFocusNode,
+            VoidCallback onFieldSubmitted) {
+          textEditingController = fieldTextEditingController;
+          return TextField(
+            controller: fieldTextEditingController,
+            focusNode: fieldFocusNode,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          );
+        },
+      );
+
+  int tag = 1;
+
   Widget buildPlace() => ToggleSwitch(
-        initialLabelIndex: place,
+        initialLabelIndex: 0,
         totalSwitches: 2,
         minWidth: 100,
         labels: const ['Platz 1', 'Platz 2'],
         onToggle: (index) {
-          place = index!;
+          place = index! + 1;
         },
       );
 
   Widget buildDuration() => ToggleSwitch(
-        initialLabelIndex: place,
+        initialLabelIndex: 0,
         totalSwitches: 2,
         minWidth: 100,
         labels: const ['1 Stunde', '2 Stunden'],
         onToggle: (index) {
-          chosenDuration = index!;
+          chosenDuration = index! + 1;
         },
       );
 
   Widget buildGuests() =>
       Row(children: [const Text('Anzahl Gäste'), buildCounterButton()]);
 
-  Widget buildSpielTyp() => Row(
-        children: [
-          Text(guestCounter < 2 ? 'Spieltyp: Einzel' : 'Spieltyp: Doppel')
-        ],
+  Widget buildSpielTyp() {
+    if (key.currentState == null) {
+      return Row(
+        children: [Text(gameType)],
       );
+    }
+    if (guestCounter + key.currentState!._cast.length < 3) {
+      gameType = 'Spieltyp: Einzel';
+      return Row(
+        children: [Text(gameType)],
+      );
+    } else if (guestCounter + key.currentState!._cast.length > 4) {
+      gameType = "Für diese Einstellungen gibt es keinen wählbaren Spieltyp!";
+      return SizedBox(
+        width: 150,
+        child: Text(gameType),
+      );
+    } else {
+      gameType = 'Spieltyp: Doppel';
+      return Row(
+        children: [Text(gameType)],
+      );
+    }
+  }
 
   Widget buildDurationPicker() => Column(
         children: [
@@ -231,8 +319,6 @@ class _EventEditingPageState extends State<EventEditingPage> {
     }
   }
 
-  int chosenDuration = 1;
-
   Future saveForm() async {
     final isValid = _formKey.currentState!.validate();
 
@@ -241,14 +327,15 @@ class _EventEditingPageState extends State<EventEditingPage> {
       final event = Event(
           start: fromDate,
           player: playerController.text,
-          numberOfPlayers: guestCounter,
-          playingType: 'Einzel',
+          numberOfPlayers: guestCounter + key.currentState!._cast.length,
+          playingType: gameType,
           duration: chosenDuration,
           place: place,
-          info: '');
+          info: infoTextController.text);
       final isEditing = widget.event != null;
-
+      print("Saving Event: ${event.writeOut()}");
       final provider = Provider.of<EventProvider>(context, listen: false);
+
       if (isEditing) {
         provider.editEvent(event, widget.event!);
         Navigator.of(context).pop();
@@ -257,5 +344,67 @@ class _EventEditingPageState extends State<EventEditingPage> {
       }
       Navigator.of(context).pop();
     }
+  }
+
+  buildInfo() {
+    return TextField(
+      controller: infoTextController,
+      decoration: InputDecoration(
+          border: InputBorder.none,
+          labelText: 'Erweiterte Infos eingeben',
+          hintText: 'Ich komme erst ab ...'),
+    );
+  }
+}
+
+class CastList extends StatefulWidget {
+  const CastList({required Key key}) : super(key: key);
+
+  @override
+  State createState() => CastListState();
+}
+
+class CastListState extends State<CastList> {
+  final List<String> _cast = [
+    "Fritz",
+  ];
+
+  addToCastList(String value) {
+    _cast.add(value);
+    updateList();
+    playerController.text = _cast.toString();
+  }
+
+  updateList() {
+    actorWidgets;
+  }
+
+  Iterable<Widget> get actorWidgets {
+    return _cast.map((String actor) {
+      return Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Chip(
+          label: Text(actor),
+          onDeleted: () {
+            setState(() {
+              if (_cast.length > 1) {
+                //ToDo: Change to Current User
+                _cast.removeWhere((String entry) {
+                  return entry == actor;
+                });
+              }
+              playerController.text = _cast.toString();
+            });
+          },
+        ),
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      children: actorWidgets.toList(),
+    );
   }
 }

@@ -27,7 +27,7 @@ class _TaskWidgetState extends State<TaskWidget> {
       return SfCalendarTheme(
         data: SfCalendarThemeData(),
         child: SfCalendar(
-          view: CalendarView.timelineDay,
+          view: CalendarView.timelineWeek,
           dataSource: DataSource.getDataSource(provider.events),
           initialDisplayDate: provider.selectedDate,
           resourceViewSettings:

@@ -21,4 +21,8 @@ class Event extends Appointment {
             startTime: start,
             endTime: start.add(Duration(hours: duration)),
             resourceIds: <Object>['000$place']);
+
+  String writeOut() {
+    return 'Event{start: $start, player: $player, numberOfPlayers: $numberOfPlayers, playingType: $playingType, duration: $duration, place: $place, info: $info}';
+  }
 }

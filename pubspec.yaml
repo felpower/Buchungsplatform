@@ -35,16 +35,17 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   booking_calendar: ^1.1.4
-  firebase_core: ^1.21.0
-  cloud_firestore: ^3.4.5
+  firebase_core: ^2.1.1
+  cloud_firestore: ^4.0.3
   json_annotation: ^4.6.0
   intl: ^0.17.0
+  chips_choice: ^3.0.0
   time_picker_widget: ^1.0.0+10
   toggle_switch: ^2.0.1
   counter_button: ^1.0.1
-  syncfusion_flutter_calendar: ^19.1.58
-  firebase_database: ^6.1.2
-  firebase_auth: ^3.3.11
+  syncfusion_flutter_calendar: ^20.3.52
+  firebase_database: ^10.0.3
+  firebase_auth: ^4.1.0
   provider: ^6.0.2
 
 dev_dependencies:
