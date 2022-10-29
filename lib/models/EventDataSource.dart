@@ -30,12 +30,14 @@ class DataSource extends CalendarDataSource {
 
   @override
   String getSubject(int index) {
-    return getEvent(index).player;
+    return getEvent(index).player.toString();
   }
 
   static DataSource getDataSource(List<Event> events) {
     List<CalendarResource> resources = <CalendarResource>[];
-
+    for(Event ev in events){
+      print(ev.writeOut());
+    }
     resources.add(CalendarResource(
         displayName: 'Platz 1', id: '0001', color: Colors.red));
     resources.add(CalendarResource(

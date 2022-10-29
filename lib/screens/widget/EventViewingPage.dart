@@ -25,7 +25,7 @@ class EventViewingPage extends StatelessWidget {
           children: <Widget>[
             buildDateTime(event),
             SizedBox(height: 32),
-            Text(event.player,
+            Text(event.player.join(" "),
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
             const SizedBox(height: 24),
             Text(

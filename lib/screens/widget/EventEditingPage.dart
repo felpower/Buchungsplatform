@@ -9,7 +9,9 @@ import '../../models/Event.dart';
 import '../../services/EventProvider.dart';
 
 final key = GlobalKey<CastListState>();
-final playerController = TextEditingController();
+final List<String> cast = [
+  "Fritz",
+];
 
 class EventEditingPage extends StatefulWidget {
   final Event? event;
@@ -32,7 +34,6 @@ class _EventEditingPageState extends State<EventEditingPage> {
   int guestCounter = 0;
   String gameType = 'Spieltyp: Einzel';
   int place = 1;
-  String players = "Patrick";
   TextEditingController textEditingController = TextEditingController();
   TextEditingController infoTextController = TextEditingController();
   CastList stateWidget = CastList(key: key);
@@ -46,29 +47,16 @@ class _EventEditingPageState extends State<EventEditingPage> {
       fromDate = fromDate
           .subtract(Duration(minutes: fromDate.minute))
           .add(const Duration(hours: 1));
-      print("From Date: $fromDate");
       toDate = DateTime.now().add(const Duration(hours: 2));
     } else {
       final event = widget.event!;
-
-      playerController.text = event.player;
 
       fromDate = event.startTime;
       fromDate = fromDate
           .subtract(Duration(minutes: fromDate.minute))
           .add(const Duration(hours: 1));
-      print("From Date: $fromDate");
       toDate = fromDate.add(Duration(hours: event.duration));
     }
-  }
-
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    infoTextController.dispose();
-    textEditingController.dispose();
-    playerController.dispose();
-    super.dispose();
   }
 
   @override
@@ -152,10 +140,9 @@ class _EventEditingPageState extends State<EventEditingPage> {
           }
         },
         onSelected: (String selection) {
+          textEditingController.text = "";
           key.currentState?.addToCastList(selection);
           (context as Element).reassemble();
-          playerController.text = key.currentState!._cast.toString();
-          textEditingController.text = "";
         },
         fieldViewBuilder: (BuildContext context,
             TextEditingController fieldTextEditingController,
@@ -201,12 +188,12 @@ class _EventEditingPageState extends State<EventEditingPage> {
         children: [Text(gameType)],
       );
     }
-    if (guestCounter + key.currentState!._cast.length < 3) {
+    if (guestCounter + cast.length < 3) {
       gameType = 'Spieltyp: Einzel';
       return Row(
         children: [Text(gameType)],
       );
-    } else if (guestCounter + key.currentState!._cast.length > 4) {
+    } else if (guestCounter + cast.length > 4) {
       gameType = "Für diese Einstellungen gibt es keinen wählbaren Spieltyp!";
       return SizedBox(
         width: 150,
@@ -323,11 +310,12 @@ class _EventEditingPageState extends State<EventEditingPage> {
     final isValid = _formKey.currentState!.validate();
 
     if (isValid) {
+      List<String> pl = cast;
       //ToDo: Validate and change player counter
       final event = Event(
           start: fromDate,
-          player: playerController.text,
-          numberOfPlayers: guestCounter + key.currentState!._cast.length,
+          player: pl,
+          numberOfPlayers: guestCounter + cast.length,
           playingType: gameType,
           duration: chosenDuration,
           place: place,
@@ -365,35 +353,25 @@ class CastList extends StatefulWidget {
 }
 
 class CastListState extends State<CastList> {
-  final List<String> _cast = [
-    "Fritz",
-  ];
-
   addToCastList(String value) {
-    _cast.add(value);
-    updateList();
-    playerController.text = _cast.toString();
-  }
-
-  updateList() {
+    cast.add(value);
     actorWidgets;
   }
 
   Iterable<Widget> get actorWidgets {
-    return _cast.map((String actor) {
+    return cast.map((String actor) {
       return Padding(
         padding: const EdgeInsets.all(4.0),
         child: Chip(
           label: Text(actor),
           onDeleted: () {
             setState(() {
-              if (_cast.length > 1) {
+              if (cast.length > 1) {
                 //ToDo: Change to Current User
-                _cast.removeWhere((String entry) {
+                cast.removeWhere((String entry) {
                   return entry == actor;
                 });
               }
-              playerController.text = _cast.toString();
             });
           },
         ),

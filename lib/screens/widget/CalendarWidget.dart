@@ -31,6 +31,26 @@ class CalendarWidget extends StatelessWidget {
     );
   }
 
+  Widget appointmentBuilder(
+      BuildContext context, CalendarAppointmentDetails details) {
+    final event = details.appointments.first;
+
+    return Container(
+      width: details.bounds.width,
+      height: details.bounds.height,
+      decoration: BoxDecoration(
+          color: Colors.yellowAccent.shade700,
+          borderRadius: BorderRadius.circular(12)),
+      child: Text(
+        event.player,
+        maxLines: 5,
+        overflow: TextOverflow.ellipsis,
+        style: const TextStyle(
+            color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
   List<TimeRegion> _getTimeRegions() {
     final List<TimeRegion> regions = <TimeRegion>[];
     regions.add(TimeRegion(

@@ -31,17 +31,18 @@ class _TaskWidgetState extends State<TaskWidget> {
           dataSource: DataSource.getDataSource(provider.events),
           initialDisplayDate: provider.selectedDate,
           resourceViewSettings:
-          const ResourceViewSettings(visibleResourceCount: 2, size: 40),
+              const ResourceViewSettings(visibleResourceCount: 2, size: 40),
           appointmentBuilder: appointmentBuilder,
           todayHighlightColor: Colors.black,
           selectionDecoration:
               BoxDecoration(color: Colors.red.withOpacity(0.3)),
           onTap: (details) {
-            if(details.appointments == null) {
+            if (details.appointments == null) {
               return;
             }
             final event = details.appointments!.first;
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => EventViewingPage(event: event)));
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => EventViewingPage(event: event)));
           },
         ),
       );
@@ -59,7 +60,7 @@ class _TaskWidgetState extends State<TaskWidget> {
           color: Colors.green.shade700,
           borderRadius: BorderRadius.circular(12)),
       child: Text(
-        event.player,
+        event.player.toString(),
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
         style: const TextStyle(
