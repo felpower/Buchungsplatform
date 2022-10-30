@@ -310,7 +310,8 @@ class _EventEditingPageState extends State<EventEditingPage> {
     final isValid = _formKey.currentState!.validate();
 
     if (isValid) {
-      List<String> pl = cast;
+      List<String> pl = <String>[];
+      pl.addAll(cast);
       //ToDo: Validate and change player counter
       final event = Event(
           start: fromDate,

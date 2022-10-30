@@ -60,8 +60,8 @@ class _TaskWidgetState extends State<TaskWidget> {
           color: Colors.green.shade700,
           borderRadius: BorderRadius.circular(12)),
       child: Text(
-        event.player.toString(),
-        maxLines: 2,
+        event.player.join(",\n"),
+        maxLines: 4,
         overflow: TextOverflow.ellipsis,
         style: const TextStyle(
             color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),

@@ -14,10 +14,16 @@ class CalendarWidget extends StatelessWidget {
     final events = Provider.of<EventProvider>(context).events;
     return SfCalendar(
       view: CalendarView.timelineDay,
+      allowedViews: const [
+        CalendarView.timelineDay,
+        CalendarView.timelineWeek,
+      ],
+      showDatePickerButton: true,
       dataSource: DataSource.getDataSource(events),
       initialDisplayDate: DateTime.now(),
       firstDayOfWeek: DateTime.monday,
       specialRegions: _getTimeRegions(),
+      appointmentBuilder: appointmentBuilder,
       resourceViewSettings:
           const ResourceViewSettings(visibleResourceCount: 2, size: 50),
       onLongPress: (details) {
@@ -42,7 +48,7 @@ class CalendarWidget extends StatelessWidget {
           color: Colors.yellowAccent.shade700,
           borderRadius: BorderRadius.circular(12)),
       child: Text(
-        event.player,
+        event.player.join(",\n"),
         maxLines: 5,
         overflow: TextOverflow.ellipsis,
         style: const TextStyle(
@@ -54,8 +60,8 @@ class CalendarWidget extends StatelessWidget {
   List<TimeRegion> _getTimeRegions() {
     final List<TimeRegion> regions = <TimeRegion>[];
     regions.add(TimeRegion(
-        startTime: DateTime.utc(2022,1, 1, 20),
-        endTime: DateTime.utc(2022,1, 1, 21).add(Duration(hours: 11)),
+        startTime: DateTime.utc(2022, 1, 1, 20),
+        endTime: DateTime.utc(2022, 1, 1, 21).add(Duration(hours: 11)),
         recurrenceRule: 'FREQ=DAILY',
         enablePointerInteraction: false,
         color: Colors.grey.withOpacity(0.2)));
